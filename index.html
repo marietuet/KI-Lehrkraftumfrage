@@ -3,415 +3,302 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Fragebogen: KI in der Unterrichtsvorbereitung</title>
+<title>KI in der Unterrichtsvorbereitung – Umfrage</title>
 <style>
   * { box-sizing: border-box; margin: 0; padding: 0; }
-  body { font-family: 'Segoe UI', Arial, sans-serif; background: #f5f6fa; color: #2d2d2d; line-height: 1.6; }
-
-  .header { background: #3a5a8c; color: white; padding: 36px 24px 28px; text-align: center; }
-  .header h1 { font-size: 1.5rem; font-weight: 700; margin-bottom: 8px; max-width: 700px; margin-left: auto; margin-right: auto; }
-  .header p { font-size: 0.95rem; opacity: 0.88; max-width: 620px; margin: 0 auto; }
-
-  .container { max-width: 720px; margin: 32px auto 60px; padding: 0 16px; }
-
-  .section-label { font-size: 0.7rem; font-weight: 700; text-transform: uppercase; letter-spacing: 1.2px; color: #3a5a8c; margin-bottom: 12px; margin-top: 32px; }
-
-  .card { background: white; border-radius: 10px; padding: 24px; margin-bottom: 16px; box-shadow: 0 1px 4px rgba(0,0,0,0.08); }
-  .card > label { display: block; font-weight: 600; font-size: 0.98rem; margin-bottom: 12px; }
-
-  select, input[type="text"] {
-    width: 100%; padding: 10px 12px; border: 1.5px solid #dde1ea; border-radius: 7px;
-    font-size: 0.95rem; font-family: inherit; background: #fafbfc; color: #2d2d2d; transition: border-color 0.2s;
+  body {
+    font-family: 'Segoe UI', system-ui, sans-serif;
+    background: #f5f4f0;
+    color: #1a1a1a;
+    min-height: 100vh;
+    padding: 28px 16px 60px;
   }
-  select:focus, input[type="text"]:focus { outline: none; border-color: #3a5a8c; background: white; }
-
-  /* Einstellung Skala */
-  .scale-wrap { display: flex; border: 1.5px solid #dde1ea; border-radius: 8px; overflow: hidden; }
-  .scale-wrap input[type="radio"] { display: none; }
-  .scale-wrap label.scale-opt {
-    flex: 1; text-align: center; padding: 10px 4px; font-size: 0.78rem; font-weight: 400;
-    cursor: pointer; border-right: 1px solid #dde1ea; background: #fafbfc; transition: background 0.15s; line-height: 1.3;
-  }
-  .scale-wrap label.scale-opt:last-child { border-right: none; }
-  .scale-wrap input[type="radio"]:checked + label.scale-opt { background: #3a5a8c; color: white; font-weight: 600; }
-  .scale-wrap label.scale-opt:hover { background: #e8eef7; }
-
-  /* Technology Adoption Curve */
-  .tac-wrap { display: flex; flex-direction: column; gap: 10px; }
-  .tac-wrap input[type="radio"] { display: none; }
-  .tac-card { border: 2px solid #dde1ea; border-radius: 9px; padding: 14px 16px; cursor: pointer; transition: border-color 0.2s, background 0.2s; background: #fafbfc; }
-  .tac-card:hover { border-color: #3a5a8c; background: #eef2f9; }
-  .tac-wrap input[type="radio"]:checked + .tac-card { border-color: #3a5a8c; background: #eef2f9; }
-  .tac-card .tac-title { font-weight: 700; font-size: 0.95rem; color: #3a5a8c; margin-bottom: 3px; }
-  .tac-card .tac-desc { font-size: 0.85rem; color: #555; line-height: 1.45; }
-
-  /* Checkboxen für Parts */
-  .checkbox-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-bottom: 14px; }
-  .checkbox-grid label { display: flex; align-items: center; gap: 8px; font-size: 0.9rem; font-weight: 400; cursor: pointer; padding: 8px 10px; border: 1.5px solid #dde1ea; border-radius: 7px; background: #fafbfc; transition: border-color 0.2s, background 0.2s; }
-  .checkbox-grid label:hover { border-color: #3a5a8c; background: #eef2f9; }
-  .checkbox-grid input[type="checkbox"] { accent-color: #3a5a8c; width: 15px; height: 15px; flex-shrink: 0; }
-  .checkbox-grid input[type="checkbox"]:checked + span { font-weight: 600; }
-  @media (max-width: 480px) { .checkbox-grid { grid-template-columns: 1fr; } }
-
-  /* Voice areas */
-  .voice-area { position: relative; }
-  textarea { width: 100%; min-height: 120px; padding: 12px 48px 12px 12px; border: 1.5px solid #dde1ea; border-radius: 7px; font-size: 0.95rem; font-family: inherit; background: #fafbfc; color: #2d2d2d; resize: vertical; transition: border-color 0.2s; }
-  textarea:focus { outline: none; border-color: #3a5a8c; background: white; }
-  .mic-btn { position: absolute; top: 10px; right: 10px; background: none; border: none; cursor: pointer; padding: 4px; border-radius: 50%; transition: background 0.2s; display: flex; align-items: center; justify-content: center; }
-  .mic-btn:hover { background: #e8eef7; }
-  .mic-btn svg { width: 22px; height: 22px; }
-  .mic-btn.recording { animation: pulse 1s infinite; }
-  @keyframes pulse { 0%, 100% { box-shadow: 0 0 0 0 rgba(229,62,62,0.4); } 50% { box-shadow: 0 0 0 6px rgba(229,62,62,0); } }
-  .mic-status { font-size: 0.78rem; color: #e53e3e; margin-top: 4px; min-height: 16px; }
-
-  .submit-wrap { text-align: center; margin-top: 32px; }
-  .submit-btn { background: #3a5a8c; color: white; border: none; padding: 14px 48px; border-radius: 8px; font-size: 1rem; font-weight: 700; cursor: pointer; transition: background 0.2s, transform 0.1s; }
-  .submit-btn:hover { background: #2d4870; }
-  .submit-btn:active { transform: scale(0.98); }
-  .success-msg { display: none; background: #e6f4ea; border: 1.5px solid #4caf50; border-radius: 10px; padding: 24px; text-align: center; color: #276932; font-weight: 600; font-size: 1.05rem; margin-top: 24px; }
-  .privacy-note { font-size: 0.78rem; color: #999; text-align: center; margin-top: 20px; max-width: 500px; margin-left: auto; margin-right: auto; }
-  .browser-warn { background: #fff8e1; border: 1px solid #f0c040; border-radius: 8px; padding: 12px 16px; font-size: 0.85rem; color: #7a5c00; margin-bottom: 20px; display: none; }
-
-  .sublabel { font-size: 0.83rem; color: #777; margin-bottom: 14px; font-style: italic; }
+  .wrap { max-width: 660px; margin: 0 auto; }
+  h1 { font-size: 1.3rem; font-weight: 700; margin-bottom: 3px; }
+  .sub { font-size: 0.82rem; color: #888; margin-bottom: 24px; }
+  .prog-bg { background: #ddd; border-radius: 99px; height: 5px; margin-bottom: 28px; }
+  .prog { height: 5px; border-radius: 99px; background: #2d6a4f; transition: width .4s; }
+  .step { display: none; }
+  .step.on { display: block; }
+  .card { background: #fff; border-radius: 14px; padding: 24px; margin-bottom: 14px; box-shadow: 0 1px 5px rgba(0,0,0,.07); }
+  .qlabel { font-size: .7rem; font-weight: 700; text-transform: uppercase; letter-spacing: .09em; color: #2d6a4f; margin-bottom: 6px; }
+  .qtext { font-size: 1rem; font-weight: 600; line-height: 1.45; margin-bottom: 18px; }
+  .rg { display: flex; flex-direction: column; gap: 9px; }
+  .ri { display: flex; align-items: center; gap: 10px; padding: 11px 14px; border: 1.5px solid #e0e0e0; border-radius: 10px; cursor: pointer; font-size: .9rem; background: #fafafa; transition: all .15s; }
+  .ri:hover { border-color: #2d6a4f; background: #f0f7f4; }
+  .ri.sel { border-color: #2d6a4f; background: #f0f7f4; font-weight: 500; }
+  .dot { width: 17px; height: 17px; border-radius: 50%; border: 2px solid #bbb; flex-shrink: 0; position: relative; }
+  .ri.sel .dot { border-color: #2d6a4f; }
+  .ri.sel .dot::after { content: ''; width: 9px; height: 9px; border-radius: 50%; background: #2d6a4f; position: absolute; top: 50%; left: 50%; transform: translate(-50%,-50%); }
+  .cg { display: flex; flex-direction: column; gap: 9px; }
+  .ci { display: flex; align-items: center; gap: 10px; padding: 11px 14px; border: 1.5px solid #e0e0e0; border-radius: 10px; cursor: pointer; font-size: .9rem; background: #fafafa; transition: all .15s; }
+  .ci:hover { border-color: #2d6a4f; background: #f0f7f4; }
+  .ci.sel { border-color: #2d6a4f; background: #f0f7f4; font-weight: 500; }
+  .box { width: 17px; height: 17px; border-radius: 4px; border: 2px solid #bbb; flex-shrink: 0; display: flex; align-items: center; justify-content: center; font-size: .72rem; color: white; }
+  .ci.sel .box { background: #2d6a4f; border-color: #2d6a4f; }
+  .ci.sel .box::after { content: '✓'; }
+  .other-wrap { margin-top: 9px; display: none; }
+  .other-wrap.vis { display: block; }
+  .sl { width: 100%; -webkit-appearance: none; height: 6px; border-radius: 99px; outline: none; cursor: pointer; margin: 10px 0 0;
+    background: linear-gradient(to right, #2d6a4f 0%, #2d6a4f var(--v,0%), #e0e0e0 var(--v,0%), #e0e0e0 100%); }
+  .sl::-webkit-slider-thumb { -webkit-appearance: none; width: 22px; height: 22px; border-radius: 50%; background: #2d6a4f; border: 3px solid #fff; box-shadow: 0 1px 5px rgba(0,0,0,.2); cursor: pointer; }
+  .sl-row { display: flex; justify-content: space-between; font-size: .75rem; color: #aaa; margin-top: 7px; }
+  .sl-cur { text-align: center; font-weight: 700; color: #2d6a4f; font-size: .95rem; margin-top: 5px; }
+  .vbtn { display: inline-flex; align-items: center; gap: 7px; background: #2d6a4f; color: #fff; border: none; border-radius: 9px; padding: 9px 16px; font-size: .87rem; font-weight: 600; cursor: pointer; margin-bottom: 9px; transition: background .2s; }
+  .vbtn:hover { background: #1e4d38; }
+  .vbtn.rec { background: #c0392b; }
+  .tbox { background: #f5f4f0; border: 1.5px solid #e0e0e0; border-radius: 9px; padding: 11px 14px; min-height: 60px; font-size: .88rem; line-height: 1.55; color: #888; white-space: pre-wrap; margin-bottom: 8px; }
+  .tbox.filled { border-color: #2d6a4f; color: #222; }
+  .hint { font-size: .75rem; color: #bbb; margin-bottom: 5px; }
+  textarea { width: 100%; border: 1.5px solid #e0e0e0; border-radius: 9px; padding: 10px 13px; font-size: .88rem; font-family: inherit; outline: none; resize: vertical; min-height: 70px; background: #fafafa; }
+  textarea:focus { border-color: #2d6a4f; }
+  input[type=text] { width: 100%; border: 1.5px solid #e0e0e0; border-radius: 9px; padding: 10px 13px; font-size: .9rem; font-family: inherit; outline: none; background: #fafafa; }
+  input[type=text]:focus { border-color: #2d6a4f; }
+  .nav { display: flex; justify-content: space-between; align-items: center; margin-top: 22px; }
+  .cnt { font-size: .78rem; color: #ccc; }
+  .bnext { background: #2d6a4f; color: #fff; border: none; border-radius: 9px; padding: 11px 26px; font-size: .92rem; font-weight: 600; cursor: pointer; }
+  .bnext:hover { background: #1e4d38; }
+  .bback { background: none; border: 1.5px solid #ddd; border-radius: 9px; padding: 10px 18px; font-size: .88rem; cursor: pointer; color: #888; }
+  .bback:hover { border-color: #aaa; color: #333; }
+  .res { text-align: center; padding: 30px 16px; }
+  .res-icon { font-size: 3rem; margin-bottom: 14px; }
+  .res h2 { font-size: 1.2rem; margin-bottom: 8px; }
+  .res p { color: #777; font-size: .9rem; line-height: 1.5; }
+  .summ { text-align: left; margin-top: 24px; background: #f5f4f0; border-radius: 12px; padding: 20px; }
+  .summ h3 { font-size: .72rem; font-weight: 700; color: #2d6a4f; text-transform: uppercase; letter-spacing: .07em; margin-bottom: 14px; }
+  .ai { margin-bottom: 12px; padding-bottom: 12px; border-bottom: 1px solid #e8e8e8; }
+  .ai:last-child { border: none; margin: 0; padding: 0; }
+  .aq { font-size: .74rem; color: #bbb; margin-bottom: 3px; }
+  .aa { font-size: .88rem; color: #333; line-height: 1.45; }
 </style>
 </head>
 <body>
+<div class="wrap">
+  <h1>KI in der Unterrichtsvorbereitung</h1>
+  <p class="sub">Umfrage für Lehrkräfte · Universität zu Köln · Marie Tüting · mtueting@smail.uni-koeln.de</p>
+  <div class="prog-bg"><div class="prog" id="prog" style="width:0%"></div></div>
 
-<div class="header">
-  <h1>Einstellungen und Nutzungserfahrungen von Lehrkräften gegenüber generativer KI in der Unterrichtsvorbereitung</h1>
-  <p>Dieser Fragebogen dient einem studentischen Forschungsprojekt an der Universität zu Köln. Die Teilnahme ist freiwillig und anonym. Die Beantwortung dauert ca. 15–20 Minuten.</p>
-</div>
-
-<div class="container">
-
-  <div class="browser-warn" id="browserWarn">
-    ⚠️ Ihr Browser unterstützt möglicherweise keine Spracheingabe. Die Sprach-zu-Text-Funktion funktioniert am besten in Google Chrome oder Microsoft Edge.
+  <div class="step on" id="s1">
+    <div class="card">
+      <div class="qlabel">Frage 1 · Angaben zur Person</div>
+      <div class="qtext">Wie lange sind Sie bereits als Lehrkraft tätig?</div>
+      <div class="rg" id="rg1">
+        <div class="ri" onclick="radio('rg1',this,'Weniger als 2 Jahre')"><div class="dot"></div>Weniger als 2 Jahre</div>
+        <div class="ri" onclick="radio('rg1',this,'2–5 Jahre')"><div class="dot"></div>2–5 Jahre</div>
+        <div class="ri" onclick="radio('rg1',this,'6–15 Jahre')"><div class="dot"></div>6–15 Jahre</div>
+        <div class="ri" onclick="radio('rg1',this,'Mehr als 15 Jahre')"><div class="dot"></div>Mehr als 15 Jahre</div>
+      </div>
+    </div>
+    <div class="nav"><span class="cnt">1 / 6</span><button class="bnext" onclick="go(2)">Weiter →</button></div>
   </div>
 
-  <div class="card" style="margin-top:28px; border-left: 4px solid #3a5a8c;">
-    <p style="font-size:0.95rem; line-height:1.7;">
-      Im Rahmen meines Praxissemesters führe ich, <strong>Marie Tüting</strong> (Master of Education, Universität zu Köln), ein studentisches Forschungsprojekt durch. Ziel des Projekts ist es, die <strong>Einstellungen und Nutzungserfahrungen von Lehrkräften gegenüber generativer KI in der Unterrichtsvorbereitung</strong> zu erfassen. Mich interessiert dabei besonders, wie KI im beruflichen Kontext – also in der persönlichen Arbeits- und Eigenorganisation – eingesetzt wird, welche Chancen und Herausforderungen dabei wahrgenommen werden und welche Faktoren die Nutzung beeinflussen.
-    </p>
-    <p style="font-size:0.88rem; color:#666; margin-top:10px;">
-      Die Teilnahme ist freiwillig, anonym und dauert ca. 15–20 Minuten. Bei Fragen: <a href="mailto:mtueting@smail.uni-koeln.de" style="color:#3a5a8c;">mtueting@smail.uni-koeln.de</a>
-    </p>
+  <div class="step" id="s2">
+    <div class="card">
+      <div class="qlabel">Frage 2 · Unterrichtsfächer</div>
+      <div class="qtext">Welche Fächer unterrichten Sie? (Mehrfachauswahl möglich)</div>
+      <div class="cg">
+        <div class="ci" onclick="chk(this,'Gesellschaftswiss. (Geographie, Geschichte, Politik …)')"><div class="box"></div>Gesellschaftswissenschaften (Geographie, Geschichte, Politik …)</div>
+        <div class="ci" onclick="chk(this,'Sprachen (Deutsch, Englisch, Französisch …)')"><div class="box"></div>Sprachen (Deutsch, Englisch, Französisch …)</div>
+        <div class="ci" onclick="chk(this,'MINT (Mathematik, Informatik, Naturwiss., Technik)')"><div class="box"></div>MINT (Mathematik, Informatik, Naturwissenschaften, Technik)</div>
+        <div class="ci" onclick="chk(this,'Musik, Kunst, Sport')"><div class="box"></div>Musik, Kunst, Sport</div>
+        <div class="ci" id="ci-other" onclick="chkOther(this)"><div class="box"></div>Sonstiges</div>
+      </div>
+      <div class="other-wrap" id="other-wrap">
+        <input type="text" id="other-val" placeholder="Bitte Fach eingeben …" oninput="updateOther()">
+      </div>
+    </div>
+    <div class="nav">
+      <button class="bback" onclick="go(1)">← Zurück</button>
+      <span class="cnt">2 / 6</span>
+      <button class="bnext" onclick="go(3)">Weiter →</button>
+    </div>
   </div>
 
-  <form id="survey" action="https://formspree.io/f/mnjkrqjg" method="POST">
-
-    <!-- TEIL 1 -->
-    <div class="section-label">Teil 1 – Allgemeine Angaben</div>
-
+  <div class="step" id="s3">
     <div class="card">
-      <label for="geschlecht">Geschlecht</label>
-      <select name="geschlecht" id="geschlecht" required>
-        <option value="" disabled selected>Bitte auswählen …</option>
-        <option value="weiblich">Weiblich</option>
-        <option value="maennlich">Männlich</option>
-        <option value="divers">Divers</option>
-        <option value="keine_angabe">Keine Angabe</option>
-      </select>
-    </div>
-
-    <div class="card">
-      <label for="altersgruppe">Altersgruppe</label>
-      <select name="altersgruppe" id="altersgruppe" required>
-        <option value="" disabled selected>Bitte auswählen …</option>
-        <option value="unter_30">Unter 30 Jahre</option>
-        <option value="30_39">30–39 Jahre</option>
-        <option value="40_49">40–49 Jahre</option>
-        <option value="50_59">50–59 Jahre</option>
-        <option value="60_plus">60 Jahre oder älter</option>
-      </select>
-    </div>
-
-    <div class="card">
-      <label for="berufserfahrung">Wie lange sind Sie bereits als Lehrkraft tätig?</label>
-      <select name="berufserfahrung" id="berufserfahrung" required>
-        <option value="" disabled selected>Bitte auswählen …</option>
-        <option value="referendariat">Im Referendariat</option>
-        <option value="unter_1">Weniger als 1 Jahr</option>
-        <option value="1_5">1–5 Jahre</option>
-        <option value="6_10">6–10 Jahre</option>
-        <option value="11_20">11–20 Jahre</option>
-        <option value="ueber_20">Mehr als 20 Jahre</option>
-      </select>
-    </div>
-
-    <div class="card">
-      <label for="faecher">Welche Fächer unterrichten Sie?</label>
-      <input type="text" name="faecher" id="faecher" placeholder="z. B. Geographie, Englisch" required>
-    </div>
-
-    <!-- TEIL 2 -->
-    <div class="section-label">Teil 2 – KI-Nutzung</div>
-
-    <div class="card">
-      <label>Wo würden Sie sich auf der Technology Adoption Curve einordnen – wie früh oder spät übernehmen Sie neue Technologien im Allgemeinen?</label>
-      <p class="sublabel">Wählen Sie die Beschreibung, die am besten zu Ihnen passt.</p>
-      <div class="tac-wrap">
-        <input type="radio" name="tac" id="tac1" value="innovatorin">
-        <label class="tac-card" for="tac1">
-          <div class="tac-title">Innovatorin / Innovator</div>
-          <div class="tac-desc">Ich probiere neue Technologien sofort und begeistert aus – oft bevor andere davon gehört haben.</div>
-        </label>
-        <input type="radio" name="tac" id="tac2" value="early_adopter">
-        <label class="tac-card" for="tac2">
-          <div class="tac-title">Early Adopter</div>
-          <div class="tac-desc">Ich steige früh ein, wenn ich den Nutzen erkenne, und teile meine Erfahrungen gerne mit anderen.</div>
-        </label>
-        <input type="radio" name="tac" id="tac3" value="fruehe_mehrheit">
-        <label class="tac-card" for="tac3">
-          <div class="tac-title">Frühe Mehrheit</div>
-          <div class="tac-desc">Ich warte ab, bis sich etwas bewährt hat – dann steige ich aktiv ein.</div>
-        </label>
-        <input type="radio" name="tac" id="tac4" value="spaete_mehrheit">
-        <label class="tac-card" for="tac4">
-          <div class="tac-title">Späte Mehrheit</div>
-          <div class="tac-desc">Ich nutze etwas Neues erst, wenn es sich weitgehend durchgesetzt hat oder ich dazu aufgefordert werde.</div>
-        </label>
-        <input type="radio" name="tac" id="tac5" value="nachzueglerin">
-        <label class="tac-card" for="tac5">
-          <div class="tac-title">Nachzüglerin / Nachzügler</div>
-          <div class="tac-desc">Ich halte neue Technologien eher kritisch auf Abstand und passe mich nur langsam oder widerwillig an.</div>
-        </label>
+      <div class="qlabel">Frage 3 · Nutzungshäufigkeit</div>
+      <div class="qtext">Wie häufig setzen Sie generative KI zur Unterrichtsvorbereitung ein?</div>
+      <input type="range" class="sl" id="slider" min="0" max="4" value="0" oninput="slide(this)">
+      <div class="sl-row">
+        <span>Gar nicht</span><span>Selten</span><span>Gelegentlich</span><span>Oft</span><span>Sehr oft</span>
       </div>
+      <div class="sl-cur" id="slcur">Gar nicht</div>
     </div>
+    <div class="nav">
+      <button class="bback" onclick="go(2)">← Zurück</button>
+      <span class="cnt">3 / 6</span>
+      <button class="bnext" onclick="go(4)">Weiter →</button>
+    </div>
+  </div>
 
+  <div class="step" id="s4">
     <div class="card">
-      <label for="erstnutzung">Vor wie langer Zeit haben Sie generative KI erstmals als Hilfe bei der Unterrichtsvorbereitung hinzugezogen?</label>
-      <input type="text" name="erstnutzung" id="erstnutzung" placeholder="z. B. vor ca. 6 Monaten, seit Anfang 2024 …">
+      <div class="qlabel">Frage 4 · Tools & Nutzungsweise</div>
+      <div class="qtext">Welche KI-Tools kennen oder nutzen Sie? Wie setzen Sie diese konkret bei der Unterrichtsvorbereitung ein?</div>
+      <button class="vbtn" id="vb4" onclick="startVoice(4)">🎙️ <span id="vt4">Antwort einsprechen</span></button>
+      <div class="tbox" id="tb4">Ihre Antwort erscheint hier …</div>
+      <p class="hint">Oder schriftlich eingeben:</p>
+      <textarea id="tx4" placeholder="z. B. ChatGPT für Aufgabenideen, Fobizz für Differenzierungsmaterialien …" oninput="syncTx(4)"></textarea>
     </div>
+    <div class="nav">
+      <button class="bback" onclick="go(3)">← Zurück</button>
+      <span class="cnt">4 / 6</span>
+      <button class="bnext" onclick="go(5)">Weiter →</button>
+    </div>
+  </div>
 
+  <div class="step" id="s5">
     <div class="card">
-      <label for="ki_tools_kurz">Welche KI-Tools nutzen Sie? <span style="font-weight:400; color:#666;">(Gerne mehrere angeben)</span></label>
-      <textarea id="ki_tools_kurz" name="ki_tools_kurz" placeholder="z. B. ChatGPT, Gemini, Perplexity, Canva, Copilot …" style="min-height:70px; padding:10px 12px;"></textarea>
+      <div class="qlabel">Frage 5 · Chancen & Herausforderungen</div>
+      <div class="qtext">Welche Entlastungspotenziale nehmen Sie durch KI wahr – und welche Bedenken oder Schwierigkeiten begegnen Ihnen im Umgang damit?</div>
+      <button class="vbtn" id="vb5" onclick="startVoice(5)">🎙️ <span id="vt5">Antwort einsprechen</span></button>
+      <div class="tbox" id="tb5">Ihre Antwort erscheint hier …</div>
+      <p class="hint">Oder schriftlich eingeben:</p>
+      <textarea id="tx5" placeholder="z. B. Zeitersparnis, aber Unsicherheit über pädagogische Qualität …" oninput="syncTx(5)"></textarea>
     </div>
-
-    <!-- TEIL 3 -->
-    <div class="section-label">Teil 3 – Erfahrungen und Einstellungen</div>
-
-    <div style="background:#eef2f9; border-left: 4px solid #3a5a8c; border-radius:0 8px 8px 0; padding:16px 18px; margin-bottom:20px; font-size:0.92rem; color:#2d2d2d; line-height:1.6;">
-      <strong>Bitte sprechen Sie frei!</strong> Mich interessiert Ihre ganz persönliche Erfahrung. Klicken Sie auf das 🎙️-Symbol und erzählen Sie drauflos, wie Sie es in einem Gespräch tun würden. Der gesprochene Text wird automatisch transkribiert. Je offener und konkreter, desto wertvoller. <em>Es gibt auch die Option zu schreiben.</em>
+    <div class="nav">
+      <button class="bback" onclick="go(4)">← Zurück</button>
+      <span class="cnt">5 / 6</span>
+      <button class="bnext" onclick="go(6)">Weiter →</button>
     </div>
+  </div>
 
+  <div class="step" id="s6">
     <div class="card">
-      <label for="vorbereitung_ablauf">Beschreiben Sie kurz, wie ein typischer Vorgang der Unterrichtsvorbereitung bei Ihnen aussieht – von Anfang bis Ende.</label>
-      <div class="voice-area">
-        <textarea id="vorbereitung_ablauf" name="vorbereitung_ablauf" placeholder="Antwort eingeben oder einsprechen …"></textarea>
-        <button type="button" class="mic-btn" onclick="toggleVoice(this, 'vorbereitung_ablauf')" title="Spracheingabe starten">
-          <svg viewBox="0 0 24 24" fill="none"><circle cx="12" cy="12" r="11" fill="#e8eef7"/><rect x="9" y="4" width="6" height="10" rx="3" fill="#3a5a8c"/><path d="M6 12a6 6 0 0 0 12 0" stroke="#3a5a8c" stroke-width="2" stroke-linecap="round"/><line x1="12" y1="18" x2="12" y2="21" stroke="#3a5a8c" stroke-width="2" stroke-linecap="round"/></svg>
-        </button>
-      </div>
-      <div class="mic-status" id="status_vorbereitung_ablauf"></div>
+      <div class="qlabel">Frage 6 · Persönliche Einstellung</div>
+      <div class="qtext">Wie stehen Sie persönlich zum Einsatz von KI im Lehrberuf – und was hat Ihre Haltung dazu geprägt?</div>
+      <button class="vbtn" id="vb6" onclick="startVoice(6)">🎙️ <span id="vt6">Antwort einsprechen</span></button>
+      <div class="tbox" id="tb6">Ihre Antwort erscheint hier …</div>
+      <p class="hint">Oder schriftlich eingeben:</p>
+      <textarea id="tx6" placeholder="z. B. grundsätzlich aufgeschlossen, aber kritisch gegenüber unreflektierter Übernahme …" oninput="syncTx(6)"></textarea>
     </div>
-
-    <div class="card">
-      <label for="ki_kompetenz">Haben Sie das Gefühl, gut über die Möglichkeiten von KI informiert und in der Nutzung geschult zu sein – besonders im Hinblick auf die Unterrichtsvorbereitung?</label>
-      <div class="voice-area">
-        <textarea id="ki_kompetenz" name="ki_kompetenz" placeholder="Antwort eingeben oder einsprechen …"></textarea>
-        <button type="button" class="mic-btn" onclick="toggleVoice(this, 'ki_kompetenz')" title="Spracheingabe starten">
-          <svg viewBox="0 0 24 24" fill="none"><circle cx="12" cy="12" r="11" fill="#e8eef7"/><rect x="9" y="4" width="6" height="10" rx="3" fill="#3a5a8c"/><path d="M6 12a6 6 0 0 0 12 0" stroke="#3a5a8c" stroke-width="2" stroke-linecap="round"/><line x1="12" y1="18" x2="12" y2="21" stroke="#3a5a8c" stroke-width="2" stroke-linecap="round"/></svg>
-        </button>
-      </div>
-      <div class="mic-status" id="status_ki_kompetenz"></div>
+    <div class="nav">
+      <button class="bback" onclick="go(5)">← Zurück</button>
+      <span class="cnt">6 / 6</span>
+      <button class="bnext" onclick="submit()" style="background:#1a5c3a">Absenden ✓</button>
     </div>
+  </div>
 
-    <div class="card">
-      <label for="ki_parts_offen">Für welche Bereiche der Unterrichtsvorbereitung nutzen Sie KI besonders häufig? <span style="font-weight:400; color:#666;">(z. B. Materialerstellung, Ideenfindung, Recherche, Prüfungsaufgaben …)</span></label>
-      <div class="voice-area">
-        <textarea id="ki_parts_offen" name="ki_parts_offen" placeholder="Antwort eingeben oder einsprechen …"></textarea>
-        <button type="button" class="mic-btn" onclick="toggleVoice(this, 'ki_parts_offen')" title="Spracheingabe starten">
-          <svg viewBox="0 0 24 24" fill="none"><circle cx="12" cy="12" r="11" fill="#e8eef7"/><rect x="9" y="4" width="6" height="10" rx="3" fill="#3a5a8c"/><path d="M6 12a6 6 0 0 0 12 0" stroke="#3a5a8c" stroke-width="2" stroke-linecap="round"/><line x1="12" y1="18" x2="12" y2="21" stroke="#3a5a8c" stroke-width="2" stroke-linecap="round"/></svg>
-        </button>
-      </div>
-      <div class="mic-status" id="status_ki_parts_offen"></div>
+  <div class="step" id="sres">
+    <div class="card res">
+      <div class="res-icon">✅</div>
+      <h2>Vielen Dank für Ihre Teilnahme!</h2>
+      <p>Ihre Antworten wurden erfolgreich übermittelt.<br>Sprachantworten wurden automatisch transkribiert.</p>
+      <div class="summ" id="summ"></div>
     </div>
-
-    <div class="card">
-      <label for="ki_konkret">Erzählen Sie bitte von der letzten konkreten Unterrichtsvorbereitung, bei der Sie generative KI eingesetzt haben. Was war Ihre Aufgabe, wie haben Sie die KI genutzt und wie zufrieden waren Sie mit dem Ergebnis?</label>
-      <div class="voice-area">
-        <textarea id="ki_konkret" name="ki_konkret" placeholder="Antwort eingeben oder einsprechen …"></textarea>
-        <button type="button" class="mic-btn" onclick="toggleVoice(this, 'ki_konkret')" title="Spracheingabe starten">
-          <svg viewBox="0 0 24 24" fill="none"><circle cx="12" cy="12" r="11" fill="#e8eef7"/><rect x="9" y="4" width="6" height="10" rx="3" fill="#3a5a8c"/><path d="M6 12a6 6 0 0 0 12 0" stroke="#3a5a8c" stroke-width="2" stroke-linecap="round"/><line x1="12" y1="18" x2="12" y2="21" stroke="#3a5a8c" stroke-width="2" stroke-linecap="round"/></svg>
-        </button>
-      </div>
-      <div class="mic-status" id="status_ki_konkret"></div>
-    </div>
-
-    <div class="card">
-      <label for="ki_zuverlaessig">Wie zuverlässig empfinden Sie die von KI erzeugten Ergebnisse für die Unterrichtsvorbereitung? Wie überprüfen Sie diese?</label>
-      <div class="voice-area">
-        <textarea id="ki_zuverlaessig" name="ki_zuverlaessig" placeholder="Antwort eingeben oder einsprechen …"></textarea>
-        <button type="button" class="mic-btn" onclick="toggleVoice(this, 'ki_zuverlaessig')" title="Spracheingabe starten">
-          <svg viewBox="0 0 24 24" fill="none"><circle cx="12" cy="12" r="11" fill="#e8eef7"/><rect x="9" y="4" width="6" height="10" rx="3" fill="#3a5a8c"/><path d="M6 12a6 6 0 0 0 12 0" stroke="#3a5a8c" stroke-width="2" stroke-linecap="round"/><line x1="12" y1="18" x2="12" y2="21" stroke="#3a5a8c" stroke-width="2" stroke-linecap="round"/></svg>
-        </button>
-      </div>
-      <div class="mic-status" id="status_ki_zuverlaessig"></div>
-    </div>
-
-    <div class="card">
-      <label for="entlastung">Was versprechen Sie sich vom Einsatz von KI in der Unterrichtsvorbereitung – oder was haben Sie bereits positiv erlebt? Inwiefern verändert oder könnte es Ihren Arbeitsalltag verändern?</label>
-      <div class="voice-area">
-        <textarea id="entlastung" name="entlastung" placeholder="Antwort eingeben oder einsprechen …"></textarea>
-        <button type="button" class="mic-btn" onclick="toggleVoice(this, 'entlastung')" title="Spracheingabe starten">
-          <svg viewBox="0 0 24 24" fill="none"><circle cx="12" cy="12" r="11" fill="#e8eef7"/><rect x="9" y="4" width="6" height="10" rx="3" fill="#3a5a8c"/><path d="M6 12a6 6 0 0 0 12 0" stroke="#3a5a8c" stroke-width="2" stroke-linecap="round"/><line x1="12" y1="18" x2="12" y2="21" stroke="#3a5a8c" stroke-width="2" stroke-linecap="round"/></svg>
-        </button>
-      </div>
-      <div class="mic-status" id="status_entlastung"></div>
-    </div>
-
-    <div class="card">
-      <label for="ki_nicht">Gibt es Bereiche der Unterrichtsvorbereitung, für die Sie KI bewusst nicht nutzen? Warum?</label>
-      <div class="voice-area">
-        <textarea id="ki_nicht" name="ki_nicht" placeholder="Antwort eingeben oder einsprechen …"></textarea>
-        <button type="button" class="mic-btn" onclick="toggleVoice(this, 'ki_nicht')" title="Spracheingabe starten">
-          <svg viewBox="0 0 24 24" fill="none"><circle cx="12" cy="12" r="11" fill="#e8eef7"/><rect x="9" y="4" width="6" height="10" rx="3" fill="#3a5a8c"/><path d="M6 12a6 6 0 0 0 12 0" stroke="#3a5a8c" stroke-width="2" stroke-linecap="round"/><line x1="12" y1="18" x2="12" y2="21" stroke="#3a5a8c" stroke-width="2" stroke-linecap="round"/></svg>
-        </button>
-      </div>
-      <div class="mic-status" id="status_ki_nicht"></div>
-    </div>
-
-    <div class="card">
-      <label for="hemmungen">Gibt es etwas, das Sie bisher davon abhält, KI häufiger oder anders bei der Unterrichtsvorbereitung einzusetzen? Erzählen Sie gerne ausführlich.</label>
-      <div class="voice-area">
-        <textarea id="hemmungen" name="hemmungen" placeholder="Antwort eingeben oder einsprechen …"></textarea>
-        <button type="button" class="mic-btn" onclick="toggleVoice(this, 'hemmungen')" title="Spracheingabe starten">
-          <svg viewBox="0 0 24 24" fill="none"><circle cx="12" cy="12" r="11" fill="#e8eef7"/><rect x="9" y="4" width="6" height="10" rx="3" fill="#3a5a8c"/><path d="M6 12a6 6 0 0 0 12 0" stroke="#3a5a8c" stroke-width="2" stroke-linecap="round"/><line x1="12" y1="18" x2="12" y2="21" stroke="#3a5a8c" stroke-width="2" stroke-linecap="round"/></svg>
-        </button>
-      </div>
-      <div class="mic-status" id="status_hemmungen"></div>
-    </div>
-
-    <div class="card">
-      <label>Wie schätzen Sie Ihre allgemeine Einstellung gegenüber dem Einsatz von KI in der Unterrichtsvorbereitung ein?</label>
-      <div class="scale-wrap">
-        <input type="radio" name="einstellung" id="e1" value="sehr_skeptisch">
-        <label class="scale-opt" for="e1">Sehr skeptisch</label>
-        <input type="radio" name="einstellung" id="e2" value="eher_skeptisch">
-        <label class="scale-opt" for="e2">Eher skeptisch</label>
-        <input type="radio" name="einstellung" id="e3" value="neutral">
-        <label class="scale-opt" for="e3">Neutral</label>
-        <input type="radio" name="einstellung" id="e4" value="eher_positiv">
-        <label class="scale-opt" for="e4">Eher positiv</label>
-        <input type="radio" name="einstellung" id="e5" value="sehr_positiv">
-        <label class="scale-opt" for="e5">Sehr positiv</label>
-      </div>
-    </div>
-
-    <div class="card">
-      <label for="einstellung_offen">Erzählen Sie etwas mehr zu Ihrer Einstellung gegenüber KI in der Unterrichtsvorbereitung – was steckt dahinter? Welche Chancen sehen Sie, welche Risiken bereiten Ihnen Sorgen?</label>
-      <div class="voice-area">
-        <textarea id="einstellung_offen" name="einstellung_offen" placeholder="Antwort eingeben oder einsprechen …"></textarea>
-        <button type="button" class="mic-btn" onclick="toggleVoice(this, 'einstellung_offen')" title="Spracheingabe starten">
-          <svg viewBox="0 0 24 24" fill="none"><circle cx="12" cy="12" r="11" fill="#e8eef7"/><rect x="9" y="4" width="6" height="10" rx="3" fill="#3a5a8c"/><path d="M6 12a6 6 0 0 0 12 0" stroke="#3a5a8c" stroke-width="2" stroke-linecap="round"/><line x1="12" y1="18" x2="12" y2="21" stroke="#3a5a8c" stroke-width="2" stroke-linecap="round"/></svg>
-        </button>
-      </div>
-      <div class="mic-status" id="status_einstellung_offen"></div>
-    </div>
-
-    <div class="card">
-      <label for="einstellung_wandel">Hat sich Ihre Einstellung zu KI im Laufe der Zeit verändert? Wenn ja, wie und warum?</label>
-      <div class="voice-area">
-        <textarea id="einstellung_wandel" name="einstellung_wandel" placeholder="Antwort eingeben oder einsprechen …"></textarea>
-        <button type="button" class="mic-btn" onclick="toggleVoice(this, 'einstellung_wandel')" title="Spracheingabe starten">
-          <svg viewBox="0 0 24 24" fill="none"><circle cx="12" cy="12" r="11" fill="#e8eef7"/><rect x="9" y="4" width="6" height="10" rx="3" fill="#3a5a8c"/><path d="M6 12a6 6 0 0 0 12 0" stroke="#3a5a8c" stroke-width="2" stroke-linecap="round"/><line x1="12" y1="18" x2="12" y2="21" stroke="#3a5a8c" stroke-width="2" stroke-linecap="round"/></svg>
-        </button>
-      </div>
-      <div class="mic-status" id="status_einstellung_wandel"></div>
-    </div>
-
-    <div class="card">
-      <label for="zukunft">Wie stellen Sie sich Ihre Unterrichtsvorbereitung in fünf Jahren vor – welche Rolle spielt KI darin?</label>
-      <div class="voice-area">
-        <textarea id="zukunft" name="zukunft" placeholder="Antwort eingeben oder einsprechen …"></textarea>
-        <button type="button" class="mic-btn" onclick="toggleVoice(this, 'zukunft')" title="Spracheingabe starten">
-          <svg viewBox="0 0 24 24" fill="none"><circle cx="12" cy="12" r="11" fill="#e8eef7"/><rect x="9" y="4" width="6" height="10" rx="3" fill="#3a5a8c"/><path d="M6 12a6 6 0 0 0 12 0" stroke="#3a5a8c" stroke-width="2" stroke-linecap="round"/><line x1="12" y1="18" x2="12" y2="21" stroke="#3a5a8c" stroke-width="2" stroke-linecap="round"/></svg>
-        </button>
-      </div>
-      <div class="mic-status" id="status_zukunft"></div>
-    </div>
-
-    <div class="card">
-      <label for="ergaenzung">Gibt es etwas zum Thema KI und Unterrichtsvorbereitung, das wir bisher nicht angesprochen haben, Ihnen aber wichtig erscheint?</label>
-      <div class="voice-area">
-        <textarea id="ergaenzung" name="ergaenzung" placeholder="Optional …" style="min-height:90px;"></textarea>
-        <button type="button" class="mic-btn" onclick="toggleVoice(this, 'ergaenzung')" title="Spracheingabe starten">
-          <svg viewBox="0 0 24 24" fill="none"><circle cx="12" cy="12" r="11" fill="#e8eef7"/><rect x="9" y="4" width="6" height="10" rx="3" fill="#3a5a8c"/><path d="M6 12a6 6 0 0 0 12 0" stroke="#3a5a8c" stroke-width="2" stroke-linecap="round"/><line x1="12" y1="18" x2="12" y2="21" stroke="#3a5a8c" stroke-width="2" stroke-linecap="round"/></svg>
-        </button>
-      </div>
-      <div class="mic-status" id="status_ergaenzung"></div>
-    </div>
-
-    <!-- Datenschutz -->
-    <div class="card" style="border: 1.5px solid #3a5a8c;">
-      <label style="display:flex; align-items:flex-start; gap:12px; cursor:pointer; font-weight:400;">
-        <input type="checkbox" name="datenschutz" id="datenschutz" required style="width:18px; height:18px; flex-shrink:0; margin-top:3px; accent-color:#3a5a8c;">
-        <span style="font-size:0.9rem; line-height:1.6;">
-          Ich habe die Informationen zur Datenverarbeitung zur Kenntnis genommen und erkläre mich damit einverstanden, dass meine Angaben im Rahmen dieses studentischen Forschungsprojekts an der Universität zu Köln anonym ausgewertet werden. Eine Weitergabe an Dritte findet nicht statt. <strong>Die Teilnahme ist freiwillig und kann jederzeit abgebrochen werden.</strong>
-        </span>
-      </label>
-    </div>
-
-    <div class="submit-wrap">
-      <button type="submit" class="submit-btn">Antworten absenden</button>
-      <p class="privacy-note">Ihre Angaben werden anonym und vertraulich behandelt. Sie dienen ausschließlich wissenschaftlichen Zwecken im Rahmen des Praxissemesters an der Universität zu Köln.</p>
-    </div>
-
-    <div class="success-msg" id="successMsg">
-      ✅ Vielen Dank für Ihre Teilnahme! Ihre Antworten wurden erfolgreich übermittelt.
-    </div>
-
-  </form>
+  </div>
 </div>
 
 <script>
-  const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
-  let activeRecognition = null, activeBtn = null;
-  if (!SpeechRecognition) document.getElementById('browserWarn').style.display = 'block';
+const SL = ['Gar nicht','Selten','Gelegentlich','Oft','Sehr oft'];
+let cur = 1;
+let D = { erf:'', fach:[], ki:'Gar nicht', q4:'', q5:'', q6:'' };
+let recs = {};
+let fachSet = new Set();
 
-  function toggleVoice(btn, fieldId) {
-    if (!SpeechRecognition) { alert('Ihr Browser unterstützt keine Spracheingabe. Bitte nutzen Sie Google Chrome oder Microsoft Edge.'); return; }
-    if (activeRecognition) {
-      activeRecognition.stop();
-      if (activeBtn && activeBtn !== btn) { activeBtn.classList.remove('recording'); const p = activeBtn.getAttribute('data-field'); if (p) document.getElementById('status_' + p).textContent = ''; }
-      if (activeBtn === btn) { activeRecognition = null; activeBtn = null; return; }
+function go(n) {
+  document.getElementById('s'+cur).classList.remove('on');
+  cur = n;
+  (document.getElementById('s'+n)||document.getElementById('sres')).classList.add('on');
+  document.getElementById('prog').style.width = (Math.min((n-1)/6,1)*100)+'%';
+  window.scrollTo(0,0);
+}
+function radio(gid, el, val) {
+  document.querySelectorAll('#'+gid+' .ri').forEach(i=>i.classList.remove('sel'));
+  el.classList.add('sel');
+  D.erf = val;
+}
+function chk(el, val) {
+  el.classList.toggle('sel');
+  if (el.classList.contains('sel')) fachSet.add(val);
+  else fachSet.delete(val);
+  D.fach = [...fachSet];
+}
+function chkOther(el) {
+  el.classList.toggle('sel');
+  document.getElementById('other-wrap').classList.toggle('vis', el.classList.contains('sel'));
+  updateOther();
+}
+function updateOther() {
+  const v = document.getElementById('other-val').value.trim();
+  fachSet.delete('__other__');
+  if (document.getElementById('ci-other').classList.contains('sel') && v) fachSet.add(v);
+  D.fach = [...fachSet];
+}
+function slide(el) {
+  const v = parseInt(el.value);
+  el.style.setProperty('--v', (v/4*100)+'%');
+  document.getElementById('slcur').textContent = SL[v];
+  D.ki = SL[v];
+}
+function startVoice(n) {
+  const SR = window.SpeechRecognition || window.webkitSpeechRecognition;
+  if (!SR) { alert('Spracherkennung wird nur in Chrome und Edge unterstützt.'); return; }
+  if (recs[n] && recs[n]._on) { recs[n].stop(); return; }
+  const r = new SR();
+  r.lang = 'de-DE'; r.continuous = true; r.interimResults = true; r._on = true;
+  recs[n] = r;
+  const btn = document.getElementById('vb'+n);
+  const btxt = document.getElementById('vt'+n);
+  const box = document.getElementById('tb'+n);
+  const tx = document.getElementById('tx'+n);
+  btn.classList.add('rec'); btxt.textContent = '■ Aufnahme stoppen';
+  let final = (tx.value||'').trim();
+  r.onresult = e => {
+    let interim = '';
+    for (let i=e.resultIndex;i<e.results.length;i++) {
+      if (e.results[i].isFinal) final += (final?' ':'')+e.results[i][0].transcript;
+      else interim += e.results[i][0].transcript;
     }
-    btn.setAttribute('data-field', fieldId);
-    const statusEl = document.getElementById('status_' + fieldId);
-    const textarea = document.getElementById(fieldId);
-    const recognition = new SpeechRecognition();
-    recognition.lang = 'de-DE'; recognition.continuous = true; recognition.interimResults = true;
-    let finalTranscript = textarea.value, interimTranscript = '';
-    recognition.onstart = () => { btn.classList.add('recording'); statusEl.textContent = '🎙️ Aufnahme läuft … (nochmals klicken zum Stoppen)'; activeRecognition = recognition; activeBtn = btn; };
-    recognition.onresult = (event) => {
-      interimTranscript = '';
-      for (let i = event.resultIndex; i < event.results.length; i++) {
-        const t = event.results[i][0].transcript;
-        if (event.results[i].isFinal) { finalTranscript += (finalTranscript ? ' ' : '') + t; } else { interimTranscript += t; }
-      }
-      textarea.value = finalTranscript + (interimTranscript ? ' ' + interimTranscript : '');
-    };
-    recognition.onerror = (e) => { btn.classList.remove('recording'); statusEl.textContent = 'Fehler: ' + (e.error === 'not-allowed' ? 'Mikrofonzugriff verweigert.' : e.error); activeRecognition = null; activeBtn = null; };
-    recognition.onend = () => { btn.classList.remove('recording'); statusEl.textContent = ''; activeRecognition = null; activeBtn = null; };
-    recognition.start();
-  }
-
-  document.getElementById('survey').addEventListener('submit', async function(e) {
-    e.preventDefault();
-    if (activeRecognition) activeRecognition.stop();
-    const submitBtn = this.querySelector('.submit-btn');
-    submitBtn.textContent = 'Wird gesendet …'; submitBtn.disabled = true;
-    try {
-      const response = await fetch(this.action, {
-        method: 'POST',
-        body: new FormData(this),
-        headers: { 'Accept': 'application/json' }
-      });
-      if (response.ok) { this.style.display = 'none'; document.getElementById('successMsg').style.display = 'block'; }
-      else { submitBtn.textContent = 'Fehler beim Senden. Bitte erneut versuchen.'; submitBtn.disabled = false; }
-    } catch { submitBtn.textContent = 'Netzwerkfehler. Bitte erneut versuchen.'; submitBtn.disabled = false; }
-  });
+    const disp = final + (interim ? ' '+interim : '');
+    box.textContent = disp||'Ihre Antwort erscheint hier …';
+    box.classList.toggle('filled', !!disp);
+    tx.value = final;
+    D['q'+n] = final;
+  };
+  const stop = () => { r._on=false; btn.classList.remove('rec'); btxt.textContent='🎙️ Antwort einsprechen'; };
+  r.onerror = stop; r.onend = stop;
+  r.start();
+}
+function syncTx(n) {
+  const v = document.getElementById('tx'+n).value;
+  const b = document.getElementById('tb'+n);
+  b.textContent = v||'Ihre Antwort erscheint hier …';
+  b.classList.toggle('filled', !!v);
+  D['q'+n] = v;
+}
+async function submit() {
+  const fach = D.fach.length ? D.fach.join(', ') : '—';
+  const rows = [
+    ['Berufserfahrung', D.erf||'—'],
+    ['Unterrichtsfächer', fach],
+    ['KI-Nutzungshäufigkeit', D.ki],
+    ['Tools & Nutzungsweise', D.q4||'—'],
+    ['Chancen & Herausforderungen', D.q5||'—'],
+    ['Persönliche Einstellung', D.q6||'—'],
+  ];
+  try {
+    await fetch('https://formspree.io/f/mnjkrqjg', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
+      body: JSON.stringify({
+        'Berufserfahrung': D.erf||'—',
+        'Unterrichtsfächer': fach,
+        'KI-Nutzungshäufigkeit': D.ki,
+        'Tools & Nutzungsweise': D.q4||'—',
+        'Chancen & Herausforderungen': D.q5||'—',
+        'Persönliche Einstellung': D.q6||'—',
+      })
+    });
+  } catch(e) { console.error('Formspree Fehler:', e); }
+  document.getElementById('summ').innerHTML =
+    '<h3>Ihre Antworten im Überblick</h3>' +
+    rows.map(r=>`<div class="ai"><div class="aq">${r[0]}</div><div class="aa">${r[1]}</div></div>`).join('');
+  document.getElementById('s'+cur).classList.remove('on');
+  document.getElementById('sres').classList.add('on');
+  document.getElementById('prog').style.width = '100%';
+  window.scrollTo(0,0);
+}
 </script>
 </body>
 </html>
